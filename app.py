@@ -1,54 +1,33 @@
 import streamlit as st
-import pandas as pd
 import joblib
+import numpy as np
 
-# Load model
-rf = joblib.load("random_forest_model.pkl")
+# Load the trained model
+model = joblib.load('model.pkl')
 
-# Title and info
-st.set_page_config(page_title="Titanic Survivor Predictor", layout="centered")
-st.title("🚢 Titanic Survivor Predictor")
-st.markdown("""
-This app predicts whether a passenger would have survived the Titanic disaster based on their details.
-""")
+st.title("🚢 Titanic Survival Prediction App")
 
-# Sidebar input
-st.sidebar.header("Passenger Details")
-pclass = st.sidebar.selectbox("Passenger Class", [1, 2, 3])
-sex = st.sidebar.radio("Sex", ["male", "female"])
-age = st.sidebar.slider("Age", 0, 80, 25)
-sibsp = st.sidebar.slider("# of Siblings/Spouses", 0, 5, 0)
-parch = st.sidebar.slider("# of Parents/Children", 0, 5, 0)
-fare = st.sidebar.slider("Fare Paid", 0.0, 500.0, 50.0)
-embarked = st.sidebar.selectbox("Port of Embarkation", ["S", "C", "Q"])
+# User inputs
+pclass = st.selectbox("Passenger Class (1 = 1st, 2 = 2nd, 3 = 3rd)", [1, 2, 3])
+sex = st.selectbox("Sex", ["male", "female"])
+age = st.slider("Age", 0, 100, 25)
+sibsp = st.number_input("Number of Siblings/Spouses Aboard", 0, 10, 0)
+parch = st.number_input("Number of Parents/Children Aboard", 0, 10, 0)
+fare = st.number_input("Fare Paid", 0.0, 600.0, 32.0)
+embarked = st.selectbox("Port of Embarkation", ["C", "Q", "S"])
 
-# Raw input DataFrame
-raw_input = pd.DataFrame({
-    'Pclass': [pclass],
-    'Age': [age],
-    'Fare': [fare],
-    'SibSp': [sibsp],
-    'Parch': [parch],
-    'Sex': [sex],
-    'Embarked': [embarked]
-})
+# Encode inputs
+sex_encoded = 1 if sex == "male" else 0
+embarked_map = {"C": 0, "Q": 1, "S": 2}
+embarked_encoded = embarked_map[embarked]
 
-# Apply the same encoding used during training
-input_data = pd.get_dummies(raw_input)
+# Prepare feature vector
+features = np.array([[pclass, sex_encoded, age, sibsp, parch, fare, embarked_encoded]])
 
-# Match the training features exactly
-input_data = input_data.reindex(columns=rf.feature_names_in_, fill_value=0)
-
-# Predict button
-if st.button("Predict Survival"):
-    prediction = rf.predict(input_data)[0]
-    proba = rf.predict_proba(input_data)[0][1]
-
-    if prediction == 1:
-        st.success(f"🎉 The passenger would have SURVIVED! (Confidence: {proba:.2%})")
+# Prediction
+if st.button("Predict"):
+    prediction = model.predict(features)
+    if prediction[0] == 1:
+        st.success("🎉 This passenger would have SURVIVED.")
     else:
-        st.error(f"❌ The passenger would NOT have survived. (Confidence: {1 - proba:.2%})")
-
-st.markdown("---")
-st.subheader("Model Input Features")
-
+        st.error("☠️ Unfortunately, this passenger would NOT have survived.")
