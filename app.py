@@ -4,6 +4,8 @@ import numpy as np
 from PIL import Image
 import time
 from streamlit.components.v1 import html
+import pandas as pd
+import matplotlib.pyplot as plt
 
 # -----------------------
 # Load model
@@ -62,7 +64,7 @@ embarked_encoded = embarked_map[embarked]
 features = np.array([[pclass, sex_encoded, age, sibsp, parch, fare, embarked_encoded]])
 
 # -----------------------
-# Prediction Button with Progress Bar and Confetti
+# Prediction Button with Progress Bar, Confetti, and Chart
 # -----------------------
 if st.button("🔍 Predict Survival"):
     progress_bar = st.progress(0)
@@ -114,3 +116,18 @@ if st.button("🔍 Predict Survival"):
 
     st.markdown("---")
     st.markdown("**📊 Did you know?** In reality, only about **38%** of passengers survived the Titanic disaster.")
+
+    # -----------------------
+    # Chart Section
+    # -----------------------
+    df = pd.read_csv("train.csv")  # Ensure train.csv is in your project folder
+    survival_rate = df.groupby("Pclass")["Survived"].mean()
+
+    fig, ax = plt.subplots()
+    survival_rate.plot(kind="bar", ax=ax, color="skyblue")
+    ax.set_title("Survival Rate by Passenger Class")
+    ax.set_ylabel("Survival Rate")
+    ax.set_xlabel("Passenger Class")
+    ax.set_ylim(0, 1)  # Survival rate is between 0 and 1
+
+    st.pyplot(fig)
