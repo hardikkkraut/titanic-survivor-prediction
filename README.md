@@ -1,83 +1,101 @@
-# titanic-survivor-prediction
+# Titanic Survivor Prediction
 
-[![Build Status](https://img.shields.io/github/actions/workflow/status/hardikkkraut/titanic-survivor-prediction/main.yml?branch=main)](https://github.com/hardikkkraut/titanic-survivor-prediction/actions)
+[![Ask DeepWiki](https://devin.ai/assets/askdeepwiki.png)](https://deepwiki.com/hardikkkraut/titanic-survivor-prediction)
 
-A machine learning project that predicts Titanic passenger survival using the Kaggle dataset. Includes data cleaning, feature engineering, EDA, and training models like Logistic Regression and Random Forest to evaluate prediction accuracy.
-
-## Table of Contents
-
-- [Features](#features)
-- [Tech Stack](#tech-stack)
-- [File Structure Overview](#file-structure-overview)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Contributing](#contributing)
-- [License](#license)
-- [Contact](#contact)
-
-<!-- TODO: Add screenshots if applicable -->
+This project provides an end-to-end machine learning solution for predicting passenger survival on the RMS Titanic, based on the classic Kaggle dataset. It includes a complete data analysis pipeline in a Jupyter Notebook, a trained Random Forest model, and an interactive web application built with Streamlit to predict survival based on user-input passenger data.
 
 ## Features
 
-- Data cleaning and preprocessing.
-- Feature engineering for improved model performance.
-- Exploratory Data Analysis (EDA) to gain insights from the dataset.
-- Implementation of machine learning models such as Logistic Regression and Random Forest.
-- Prediction of Titanic passenger survival.
-- Model evaluation using appropriate metrics.
+- **Interactive Web App**: A user-friendly Streamlit application (`app.py`) to get instant survival predictions.
+- **Complete ML Pipeline**: The `titanic_survival.ipynb` notebook covers data loading, cleaning, preprocessing, feature engineering, and model training.
+- **Pre-trained Model**: Includes a `model.pkl` file containing a pre-trained `RandomForestClassifier` for immediate use.
+- **Data Visualization**: Generates and saves key visualizations like a confusion matrix, ROC curve, and feature distributions to the `visualizations/` directory.
+- **Kaggle Submission Generation**: The notebook creates standard (`submission.csv`) and creative (`submission_fun.csv`) prediction files for the test dataset.
 
-## Tech Stack
+## Visualizations
 
-- Python
-- Jupyter Notebook
-- Machine Learning Libraries (e.g., scikit-learn)
+The analysis notebook generates the following visualizations to evaluate model performance and understand the dataset.
 
-## File Structure Overview
+| Confusion Matrix                                     | ROC Curve                                  |
+| ---------------------------------------------------- | ------------------------------------------ |
+| ![Confusion Matrix](visualizations/confusion_matrix.png) | ![ROC Curve](visualizations/roc_curve.png) |
 
-```text
+| Age Distribution                                 | Survival Count                                 |
+| ------------------------------------------------ | ---------------------------------------------- |
+| ![Age Distribution](visualizations/age_distribution.png) | ![Survival Count](visualizations/survival_count.png) |
+
+## Technology Stack
+
+- **Python**
+- **Streamlit**: For the interactive web application.
+- **Scikit-learn**: For machine learning model training and evaluation.
+- **Pandas**: For data manipulation and analysis.
+- **Matplotlib**: For generating visualizations.
+- **Jupyter Notebook**: For data exploration and model development.
+- **Joblib**: For saving and loading the trained model.
+
+## Repository Structure
+
+```
 .
-├── app.py
-├── model.pkl
-├── README.md
-├── submission.csv
-├── submission_fun.csv
-├── test.csv
-├── titanic_survival.ipynb
-├── train.csv
-└── visualizations/
+├── app.py                  # Streamlit web application
+├── model.pkl               # Pre-trained Random Forest model
+├── README.md               # This README file
+├── submission.csv          # Standard Kaggle submission file
+├── submission_fun.csv      # Creative submission file with messages
+├── test.csv                # Test dataset from Kaggle
+├── titanic_survival.ipynb  # Jupyter Notebook with the full analysis
+├── train.csv               # Training dataset from Kaggle
+└── visualizations/         # Directory for saved plots
+    ├── age_distribution.png
+    ├── confusion_matrix.png
+    ├── roc_curve.png
+    └── survival_count.png
 ```
 
-## Installation
+## Getting Started
 
-1.  Clone the repository:
-   ```bash
-   git clone https://github.com/hardikkkraut/titanic-survivor-prediction.git
-   cd titanic-survivor-prediction
-   ```
-2.  Install the necessary Python packages.  A `requirements.txt` file might be needed, but is not in the repo currently, so this step is generic.
-   ```bash
-   pip install pandas scikit-learn notebook  # Example - adjust as needed based on notebook contents
-   ```
+### Prerequisites
+
+- Python 3.8+
+- `pip` package manager
+
+### Installation
+
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/hardikkkraut/titanic-survivor-prediction.git
+    cd titanic-survivor-prediction
+    ```
+
+2.  **Install the required libraries:**
+    ```bash
+    pip install streamlit pandas scikit-learn matplotlib joblib Pillow
+    ```
+    *Note: The `app.py` file references an `image.png` that is not included in the repository. To run the app without errors, you may need to add an image with this name to the root directory or comment out the image-loading lines in `app.py`.*
 
 ## Usage
 
-1.  Open and run the `titanic_survival.ipynb` Jupyter Notebook to reproduce the analysis and modeling.
-2.  The `app.py` file, if present, can be used to deploy the model.
-3.  Review `submission.csv` for the predicted results on the test dataset.
+There are two main ways to use this repository: the interactive web app or the Jupyter Notebook.
 
-<!-- TODO: Add specific instructions on running app.py if applicable -->
+### 1. Run the Interactive Web App
 
-## Contributing
+To start the Streamlit application and make interactive predictions:
 
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+```bash
+streamlit run app.py
+```
 
-Please make sure to update tests as appropriate.
+Your web browser will open a new tab with the application, where you can input passenger details and see the model's survival prediction.
 
-## License
+### 2. Run the Jupyter Notebook
 
-<!-- TODO: Determine the license and add details here -->
-No license was explicitly found. Consider adding one.
+The notebook contains the complete workflow for this project. You can run it to understand the data processing steps, model training, and evaluation.
 
-## Contact
+1.  **Start Jupyter Notebook:**
+    ```bash
+    jupyter notebook
+    ```
 
-Your Name - [titanic-survivor-prediction](https://github.com/hardikkkraut/titanic-survivor-prediction) - email@example.com
+2.  **Open and run the notebook:**
+    In the Jupyter interface, open `titanic_survival.ipynb` and run the cells sequentially to reproduce the analysis and generate the submission files.
